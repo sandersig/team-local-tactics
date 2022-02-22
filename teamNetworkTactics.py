@@ -93,7 +93,7 @@ def print_match_summary(match: Match) -> None:
 def main() -> None:
 
     print('\n'
-          'Welcome to [bold yellow]Team Local Tactics[/bold yellow]!'
+          'Welcome to [bold yellow]Team Network Tactics[/bold yellow]!'
           '\n'
           'Each player choose a champion each time.'
           '\n')
