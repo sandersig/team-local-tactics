@@ -16,19 +16,25 @@ def new_client(conn):
     if len(players) == 2:
         players[0].send(str.encode("1"))
         players[1].send(str.encode("1"))
+    
+    champions = load_some_champs()
+    msg = print_available_champs(champions)
+    players[0].send(str.encode(f"{msg}"))
+    players[1].send(str.encode(f"{msg}"))
+    """
     for _ in range(2):
         players[0].send(str.encode("Player 1"))
         data = conn.recv(1024)
         player1.append(data)
         print(player1)
-        
+
         #input_champion('Player 1', 'red', champions, player1, player2)
         players[1].send(str.encode("Player 2"))
         data = conn.recv(1024)
         player2.append(data)
         print(player1)
         #input_champion('Player 2', 'blue', champions, player2, player1)
-        
+       """
         
 #players = {}
 

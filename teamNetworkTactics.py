@@ -1,12 +1,13 @@
 from rich import print
 from rich.prompt import Prompt
 from rich.table import Table
+from rich.console import Console
 
 from champlistloader import load_some_champs
 from core import Champion, Match, Shape, Team
 
 
-def print_available_champs(champions: dict[Champion]) -> None:
+def print_available_champs(champions: dict[Champion]) -> str: 
 
     # Create a table containing available champions
     available_champs = Table(title='Available champions')
@@ -22,7 +23,10 @@ def print_available_champs(champions: dict[Champion]) -> None:
     for champion in champions.values():
         available_champs.add_row(*champion.str_tuple)
 
-    print(available_champs)
+    console = Console(record = True)
+    console.print(available_champs)
+    string = console.export_text()
+    return string
 
 
 def input_champion(prompt: str,
