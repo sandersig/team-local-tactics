@@ -9,22 +9,6 @@ sock.bind(("localhost", 8888))
 
 sock.listen(2)
 
-def input_champion(name: str,
-                   champions: dict[Champion],
-                   player1: list[str],
-                   player2: list[str]) -> None:
-    while True:
-        match name:
-            case name if name not in champions:
-                print(f'The champion {name} is not available. Try again.')
-            case name if name in player1:
-                print(f'{name} is already in your team. Try again.')
-            case name if name in player2:
-                print(f'{name} is in the enemy team. Try again.')
-            case _:
-                player1.append(name)
-                break
-
 def new_client(conn):
     conn.send(str.encode("Connected")) #Let the player know when they are connected
     if len(players) == 2:
@@ -38,28 +22,22 @@ def new_client(conn):
 
         player1 = []
         player2 = []
-        for _ in range(2):
-            players[0].send(str.encode("Player 1"))
-            data = players[0].recv(1024)
-            #player1.append(data.decode())
-            #print(player1)
-            input_champion(data.decode() , champions, player1, player2)
-
-            players[1].send(str.encode("Player 2"))
-            data = players[1].recv(1024)
-            #player2.append(data.decode())
-            #print(player1)
-            input_champion(data.decode(), champions, player2, player1)
         
-        # Match
-        match = Match(
-            Team([champions[name] for name in player1]),
-            Team([champions[name] for name in player2])
-        )
-        match.play()
+        choice = True
 
-        # Print a summary
-        result = print_match_summary(match)
+        for _ in range(2):
+            while choice:
+                players[0].send(str.encode("Player 1"))
+                data = players[0].recv(1024)
+                choice = input_champion(data.decode() , champions, player1, player2)
+            
+            choice = True
+            while choice:
+                players[1].send(str.encode("Player 2"))
+                data = players[1].recv(1024)
+                choice = input_champion(data.decode(), champions, player2, player1)
+
+        result = play_match(champions, player1, player2)
         players[0].send(str.encode(f"{result}"))
         players[1].send(str.encode(f"{result}"))
         sock.close()
