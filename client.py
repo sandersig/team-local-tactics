@@ -16,17 +16,10 @@ while True:
           'Each player choose a champion each time.'
           '\n')
         data = sock.recv(1024)
-        print(data.decode())
+        print(data.decode()) #Table gettin printed
         print('\n')
-        """
         while True:
-            prompt = sock.recv(1024)
-            input(prompt.decode())
-        """
-        #print overview of champions to player -> done
-        #take input one at a time, and put straight into a list
-        #When done, return this list to the main-program and let it do its result handling
-        
-
-#input_champion(input from one of the clients)
+            prompt = sock.recv(2048)
+            data = input(prompt.decode())
+            sock.send(str.encode(f"{data}"))    
 

@@ -52,6 +52,8 @@ def input_champion(prompt: str,
 
 def print_match_summary(match: Match) -> None:
 
+    console = Console(record = True)
+
     EMOJI = {
         Shape.ROCK: ':raised_fist-emoji:',
         Shape.PAPER: ':raised_hand-emoji:',
@@ -77,21 +79,24 @@ def print_match_summary(match: Match) -> None:
             red, blue = key.split(', ')
             round_summary.add_row(f'{red} {EMOJI[round[key].red]}',
                                   f'{blue} {EMOJI[round[key].blue]}')
-        print(round_summary)
-        print('\n')
+        console.print(round_summary)
+        console.print('\n')
 
     # Print the score
     red_score, blue_score = match.score
-    print(f'Red: {red_score}\n'
+    console.print(f'Red: {red_score}\n'
           f'Blue: {blue_score}')
 
     # Print the winner
     if red_score > blue_score:
-        print('\n[red]Red victory! :grin:')
+        console.print('\n[red]Red victory! :grin:')
     elif red_score < blue_score:
-        print('\n[blue]Blue victory! :grin:')
+        console.print('\n[blue]Blue victory! :grin:')
     else:
-        print('\nDraw :expressionless:')
+        console.print('\nDraw :expressionless:')
+
+    string = console.export_text()
+    return string
 
 
 def main() -> None:
