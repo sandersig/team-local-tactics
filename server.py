@@ -9,6 +9,19 @@ sock.bind(("localhost", 8888))
 
 sock.listen(2)
 
+def prompt_user_for_champion_choice(player_nr : int,
+                                     player1 : list[str],
+                                     player2 : list[str],
+                                     champions : dict[Champion]) -> None:
+    
+    players[player_nr].send(str.encode(f"Player {player_nr+1}: "))
+    data = players[player_nr].recv(1024)
+    msg = input_champion(data.decode(), champions, player1, player2)
+    #Need to fix better error-treatment
+    if msg != "N/A":
+        players[player_nr].send(str.encode(f"{msg}"))
+        prompt_user_for_champion_choice(player_nr, champions, player1, player2)
+
 def new_client(conn):
     conn.send(str.encode("Connected")) #Let the player know when they are connected
     if len(players) == 2:
@@ -19,23 +32,15 @@ def new_client(conn):
         msg = print_available_champs(champions)
         players[0].send(str.encode(f"{msg}"))
         players[1].send(str.encode(f"{msg}"))
-
+        
         player1 = []
         player2 = []
-        
-        choice = True
 
         for _ in range(2):
-            while choice:
-                players[0].send(str.encode("Player 1"))
-                data = players[0].recv(1024)
-                choice = input_champion(data.decode() , champions, player1, player2)
-            
-            choice = True
-            while choice:
-                players[1].send(str.encode("Player 2"))
-                data = players[1].recv(1024)
-                choice = input_champion(data.decode(), champions, player2, player1)
+            prompt_user_for_champion_choice(0, player1, player2, champions)
+            prompt_user_for_champion_choice(1, player2, player1, champions)
+            print(player1)
+            print(player2)
 
         result = play_match(champions, player1, player2)
         players[0].send(str.encode(f"{result}"))
