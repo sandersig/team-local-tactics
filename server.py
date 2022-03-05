@@ -1,13 +1,16 @@
 from socket import socket, AF_INET, SOCK_STREAM
 from _thread import *
 from teamNetworkTactics import *
+from champlistloader import from_db
+import pickle
+from mongoDB import retrieve_champions
 
 players = []
 
 sock = socket(AF_INET, SOCK_STREAM)
 sock.bind(("localhost", 8888))
 
-sock.listen(2)
+sock.listen(3)
 
 def prompt_user_for_champion_choice(player_nr : int,
                                      player1 : list[str],
@@ -22,13 +25,12 @@ def prompt_user_for_champion_choice(player_nr : int,
         players[player_nr].send(str.encode(f"{msg}"))
         prompt_user_for_champion_choice(player_nr, champions, player1, player2)
 
-def new_client(conn):
-    conn.send(str.encode("Connected")) #Let the player know when they are connected
+def new_client(conn, champions):
     if len(players) == 2:
         players[0].send(str.encode("1"))
         players[1].send(str.encode("1"))
-    
-        champions = load_some_champs()
+
+        #champions = load_some_champs()
         msg = print_available_champs(champions)
         players[0].send(str.encode(f"{msg}"))
         players[1].send(str.encode(f"{msg}"))
@@ -47,11 +49,20 @@ def new_client(conn):
         players[1].send(str.encode(f"{result}"))
         sock.close()
         
+def get_champions():
+    conn, addr = sock.accept()
+    champs = pickle.loads(conn.recv(2048))
+    champions = from_db(champs)
+    return champions
 
 while True:
     conn, addr = sock.accept()
     print(f"Connected to {addr}")
+    conn.send(str.encode("Connected")) #Let the player know when they are connected
     players.append(conn)
-    start_new_thread(new_client, (conn,)) 
+    if len(players) == 2:
+        retrieve_champions()
+        champions = get_champions()
+        start_new_thread(new_client, (conn, champions)) 
     #Everytime a client connects, a new thread gets started
     #Each thread should run its own version of the game

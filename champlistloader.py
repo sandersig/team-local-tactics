@@ -6,14 +6,15 @@ def _parse_champ(champ_text: str) -> Champion:
     return Champion(name, float(rock), float(paper), float(scissors))
 
 
-def from_csv(filename: str) -> dict[str, Champion]:
+def from_db(list_of_champions: list) -> dict[str, Champion]:
     champions = {}
-    with open(filename, 'r') as f:
-        for line in f.readlines():
-            champ = _parse_champ(line)
-            champions[champ.name] = champ
+    for champion in list_of_champions:
+        name = champion['champion']
+        rock = champion['rock']
+        paper = champion['paper']
+        scissors = champion['scissors']
+        champions[name] = Champion(name, float(rock), float(paper), float(scissors))
     return champions
-
 
 def load_some_champs():
     return from_csv('some_champs.txt')
