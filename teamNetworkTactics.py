@@ -5,6 +5,7 @@ from rich.console import Console
 
 from champlistloader import load_some_champs
 from core import Champion, Match, Shape, Team
+import pickle
 
 
 def print_available_champs(champions: dict[Champion]) -> str: 
@@ -22,7 +23,7 @@ def print_available_champs(champions: dict[Champion]) -> str:
     # Populate the table
     for champion in champions.values():
         available_champs.add_row(*champion.str_tuple)
-
+    
     console = Console(record = True)
     console.print(available_champs)
     string = console.export_text()
@@ -52,15 +53,14 @@ def input_champion(name: str,
             player1.append(name)
             return "N/A"
 
-def print_match_summary(match: Match) -> None:
-
-    console = Console(record = True)
+def print_match_summary(match: Match) -> str:
 
     EMOJI = {
         Shape.ROCK: ':raised_fist-emoji:',
         Shape.PAPER: ':raised_hand-emoji:',
         Shape.SCISSORS: ':victory_hand-emoji:'
     }
+    console = Console(record = True)
 
     # For each round print a table with the results
     for index, round in enumerate(match.rounds):
