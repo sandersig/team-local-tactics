@@ -3,7 +3,6 @@ from rich.prompt import Prompt
 from rich.table import Table
 from rich.console import Console
 
-from champlistloader import load_some_champs
 from core import Champion, Match, Shape, Team
 import pickle
 
