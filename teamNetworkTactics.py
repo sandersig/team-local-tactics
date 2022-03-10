@@ -57,7 +57,8 @@ def print_match_summary(match: Match) -> str:
             red, blue = key.split(', ')
             round_summary.add_row(f'{red} {EMOJI[round[key].red]}',
                                   f'{blue} {EMOJI[round[key].blue]}')
-        console.print(round_summary)
+                                  
+        console.print(round_summary)  
         console.print('\n')
 
     # Print the score
@@ -86,10 +87,7 @@ def play_match(champions, player1, player2) -> str:
     match.play()
 
     # Print a summary
-    console = Console(record = True)
-    console.print(print_match_summary(match))
-    string = console.export_text()
-    return string
+    return print_match_summary(match)
 
 
 if __name__ == '__main__':
