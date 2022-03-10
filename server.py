@@ -40,12 +40,11 @@ def start_game(champions):
     for _ in range(2):
         prompt_user_for_champion_choice(1, player1, player2, champions)
         prompt_user_for_champion_choice(2, player2, player1, champions)
-        print(player1) #debug
-        print(player2) #debug
 
     result = play_match(champions, player1, player2)
     players[1].send(str.encode(f"{result}"))
     players[2].send(str.encode(f"{result}"))
+    sock.close()
         
 while True:
     conn, addr = sock.accept()
@@ -59,5 +58,3 @@ while True:
         champions = from_db(champs)
         start_game(champions)
         break
-
-sock.close()

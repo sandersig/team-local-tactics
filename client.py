@@ -27,6 +27,7 @@ while True:
         print(prompt.decode())
     else:
         sock.close()
+        break
     
     
 

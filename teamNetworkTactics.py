@@ -86,7 +86,10 @@ def play_match(champions, player1, player2) -> str:
     match.play()
 
     # Print a summary
-    return print_match_summary(match)
+    console = Console(record = True)
+    console.print(print_match_summary(match))
+    string = console.export_text()
+    return string
 
 
 if __name__ == '__main__':
