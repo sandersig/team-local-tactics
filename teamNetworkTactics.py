@@ -29,30 +29,6 @@ def print_available_champs(champions: dict[Champion]) -> str:
     string = console.export_text()
     return string
 
-def input_champion(name: str,
-                   champions: dict[Champion],
-                   player1: list[str],
-                   player2: list[str]) -> str:
-   
-    console = Console(record = True)
-
-    match name:
-        case name if name not in champions:
-            console.print(f'The champion {name} is not available. Try again.')
-            string = console.export_text()
-            return string
-        case name if name in player1:
-            console.print(f'{name} is already in your team. Try again.')
-            string = console.export_text()
-            return string
-        case name if name in player2:
-            console.print(f'{name} is in the enemy team. Try again.')
-            string = console.export_text()
-            return string
-        case _:
-            player1.append(name)
-            return "N/A"
-
 def print_match_summary(match: Match) -> str:
 
     EMOJI = {

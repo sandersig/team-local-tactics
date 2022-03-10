@@ -20,6 +20,13 @@ print('\n')
 
 while True:
     prompt = sock.recv(2048)
-    data = input(prompt.decode())
-    sock.send(str.encode(f"{data}"))    
+    if prompt.decode().startswith('Player'):  
+        data = str(input(prompt.decode()))
+        sock.send(str.encode(f"{data}"))
+    elif len(prompt.decode()) > 1:
+        print(prompt.decode())
+    else:
+        sock.close()
+    
+    
 
