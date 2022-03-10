@@ -15,14 +15,19 @@ def prompt_user_for_champion_choice(player_nr : int,
                                      player1 : list[str],
                                      player2 : list[str],
                                      champions : dict[Champion]) -> None:
-    
-    players[player_nr].send(str.encode(f"Player {player_nr}: "))
-    data = players[player_nr].recv(1024)
-    msg = input_champion(data.decode(), champions, player1, player2)
-    #TODO: Need to fix better error-treatment
-    if msg != "N/A":
-        players[player_nr].send(str.encode(f"{msg}"))
-        prompt_user_for_champion_choice(player_nr, champions, player2, player1)
+
+    while True:
+        players[player_nr].send(str.encode(f"Player {player_nr}: "))
+        name = players[player_nr].recv(1024).decode()
+        if name not in champions:
+            players[player_nr].send(str.encode(f'The champion {name} is not available. Try again.'))
+        elif name in player1:
+            players[player_nr].send(str.encode(f'{name} is already in your team. Try again.'))
+        elif name in player2:
+            players[player_nr].send(str.encode(f'{name} is in the enemy team. Try again.'))
+        else:
+            player1.append(name)
+            break
 
 def start_game(champions):
     msg = print_available_champs(champions)
@@ -33,8 +38,11 @@ def start_game(champions):
     player2 = []
 
     for _ in range(2):
+        # 
         prompt_user_for_champion_choice(1, player1, player2, champions)
+
         prompt_user_for_champion_choice(2, player2, player1, champions)
+
         print(player1)
         print(player2)
 
