@@ -5,9 +5,6 @@ sock = socket()
 sock.connect(("localhost", 8888))
 
 data = sock.recv(1024)
-print(data.decode())
-
-data = sock.recv(1024)
 
 print('\n'
     'Welcome to [bold yellow]Team Network Tactics[/bold yellow]!'
