@@ -3,7 +3,6 @@ from _thread import *
 from teamNetworkTactics import *
 from champlistloader import from_db
 import pickle
-#from mongoDB import retrieve_champions
 
 players = []
 
@@ -25,7 +24,7 @@ def prompt_user_for_champion_choice(player_nr : int,
         players[player_nr].send(str.encode(f"{msg}"))
         prompt_user_for_champion_choice(player_nr, champions, player2, player1)
 
-def new_client(conn, champions):
+def start_game(champions):
     msg = print_available_champs(champions)
     players[1].send(str.encode(f"{msg}"))
     players[2].send(str.encode(f"{msg}"))
@@ -54,6 +53,4 @@ while True:
         data = players[0].recv(2048)
         champs = pickle.loads(data)
         champions = from_db(champs)
-        start_new_thread(new_client, (conn, champions)) 
-    #Everytime a client connects, a new thread gets started
-    #Each thread should run its own version of the game
+        start_game(champions)
