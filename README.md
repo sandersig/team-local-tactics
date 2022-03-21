@@ -1,4 +1,4 @@
-# team-local-tactics
+# team-network-tactics
 A game for the mandatory assignment
 
 My team only consist of me, myself and I.
